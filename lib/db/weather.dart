@@ -61,7 +61,7 @@ class WeatherDatabase {
     }
   }
 
-  Future<List<City>> readAllNotes() async {
+  Future<List<City>> readAllCities() async {
     final db = await instance.database;
 
     const orderBy = '${CityFields.name} ASC';

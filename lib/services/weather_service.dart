@@ -52,7 +52,6 @@ Future<Meteo> getWeather(name) async {
         cod : jsonResponse['cod'],
         weather : List<Weather>.filled(1,weather),
         );
-    print(meteo.toJson());
 
     return meteo;
   } else {
