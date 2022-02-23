@@ -51,7 +51,8 @@ class _WeatherState extends State<WeatherPage> {
               var icon = 'http://openweathermap.org/img/wn/' +
                   snapshot.data!.weather!.first.icon.toString() +
                   "@2x.png";
-              var celsius = (snapshot.data!.main!.temp! - 32) * 5 / 9;
+
+              print(snapshot.data!.wind!.speed!*3.6);
               return Column(children: [
                 Card(
                     margin: const EdgeInsets.all(20),
@@ -63,7 +64,7 @@ class _WeatherState extends State<WeatherPage> {
                           children: [
                             Column(
                               children: [
-                                Text(DateTime.now().toString(),
+                                Text('Mardi',
                                     style:
                                         const TextStyle(color: Colors.white)),
                                 const Text('23 février 2022',
@@ -97,14 +98,18 @@ class _WeatherState extends State<WeatherPage> {
                             Column(
                               children: [
                                 Text(
-                                    snapshot.data!.main!.temp
-                                        .toString()
-                                        .toString(),
+                                    snapshot.data!.main!.temp!.toStringAsFixed(0) + '°C',
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 25)),
-                                const Text('Humidité : 70%',
+                                Text(
+                                    'Humidité : ' +
+                                        snapshot.data!.main!.humidity
+                                            .toString() +
+                                        '%',
                                     style: TextStyle(color: Colors.white)),
-                                const Text('Vent : 2.06 km/h',
+                                Text(
+                                    'Vent : ' +(snapshot.data!.wind!.speed!*3.6).toStringAsFixed(0) +
+                                        'km/h',
                                     style: TextStyle(color: Colors.white)),
                               ],
                             )
