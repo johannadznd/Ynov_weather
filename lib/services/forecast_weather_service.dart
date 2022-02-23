@@ -14,6 +14,7 @@ Future<ForecastWeather> getForecastWeather(name) async {
     'appid': 'f46840b0403f41348c5ee528a73851de'
   });
 
+  print(url);
   var response = await http.get(url);
 
   if (response.statusCode == 200) {
@@ -29,10 +30,10 @@ Future<ForecastWeather> getForecastWeather(name) async {
       hours = ListHours(
           dt: jsonResponse['list'][i]['dt'],
           main: Main(
-            temp: jsonResponse['list'][i]['main']['temp'],
+            temp: jsonResponse['list'][i]['main']['temp'].toDouble(),
             feelsLike: jsonResponse['list'][i]['main']['feels_like'].toDouble(),
-            tempMin: jsonResponse['list'][i]['main']['temp_min'],
-            tempMax: jsonResponse['list'][i]['main']['temp_max'],
+            tempMin: jsonResponse['list'][i]['main']['temp_min'].toDouble(),
+            tempMax: jsonResponse['list'][i]['main']['temp_max'].toDouble(),
             pressure: jsonResponse['list'][i]['main']['pressure'],
             seaLevel: jsonResponse['list'][i]['main']['sea_level'],
             grndLevel: jsonResponse['list'][i]['main']['grnd_level'],
@@ -42,7 +43,7 @@ Future<ForecastWeather> getForecastWeather(name) async {
           weather: List<Weather>.filled(1, meteo),
           clouds: Clouds(all: jsonResponse['list'][i]['clouds']['all']),
           wind: Wind(
-            speed: jsonResponse['list'][i]['wind']['speed'],
+            speed: jsonResponse['list'][i]['wind']['speed'].toDouble(),
             deg: jsonResponse['list'][i]['wind']['deg'],
             gust: jsonResponse['list'][i]['wind']['gust'].toDouble(),
           ),
@@ -56,6 +57,8 @@ Future<ForecastWeather> getForecastWeather(name) async {
       listHours.add(hours);
     }
 
+
+    print(listHours.toList());
 
     ForecastWeather weather = ForecastWeather(
       cod: jsonResponse['cod'],

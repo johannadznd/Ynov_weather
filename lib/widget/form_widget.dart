@@ -26,18 +26,12 @@ class FormWidget extends StatelessWidget {
 
   Widget buildName() => TextFormField(
         initialValue: name,
-        style: const TextStyle(
-          color: Colors.amber,
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-        ),
         decoration: const InputDecoration(
-          border: InputBorder.none,
-          hintText: 'Name',
-          hintStyle: TextStyle(color: Colors.white70),
+          border: OutlineInputBorder(),
+          labelText: 'Nom ville',
         ),
         validator: (name) =>
-            name != null && name.isEmpty ? 'The name cannot be empty' : null,
+            name != null && name.isEmpty ? 'Remplir le nom' : null,
         onChanged: onChangedName,
       );
 }
