@@ -10,7 +10,8 @@ Future<Meteo> getWeather(name) async {
     'lat': coords[0].latitude.toString(),
     'lon': coords[0].longitude.toString(),
     'lang': 'fr',
-    'appid': 'f46840b0403f41348c5ee528a73851de'
+    'units': 'Metric',
+    'appid': 'f46840b0403f41348c5ee528a73851de',
   });
 
   print(url);
