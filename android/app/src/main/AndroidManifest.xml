@@ -2,7 +2,7 @@
     package="com.example.ynov_weather">
    <application
         android:label="ynov_weather"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
