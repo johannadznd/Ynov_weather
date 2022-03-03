@@ -11,6 +11,7 @@ Future<ForecastWeather> getForecastWeather(name) async {
     'lat': coords[0].latitude.toString(),
     'lon': coords[0].longitude.toString(),
     'lang': 'fr',
+    'units': 'Metric',
     'appid': 'f46840b0403f41348c5ee528a73851de'
   });
 
@@ -28,44 +29,39 @@ Future<ForecastWeather> getForecastWeather(name) async {
           icon: jsonResponse['list'][i]['weather'][0]['icon']);
 
       hours = ListHours(
-          dt: jsonResponse['list'][i]['dt'],
-          main: Main(
-            temp: jsonResponse['list'][i]['main']['temp'].toDouble(),
-            feelsLike: jsonResponse['list'][i]['main']['feels_like'].toDouble(),
-            tempMin: jsonResponse['list'][i]['main']['temp_min'].toDouble(),
-            tempMax: jsonResponse['list'][i]['main']['temp_max'].toDouble(),
-            pressure: jsonResponse['list'][i]['main']['pressure'],
-            seaLevel: jsonResponse['list'][i]['main']['sea_level'],
-            grndLevel: jsonResponse['list'][i]['main']['grnd_level'],
-            humidity: jsonResponse['list'][i]['main']['humidity'],
-            tempKf: jsonResponse['list'][i]['main']['temp_kf'].toDouble(),
-          ),
-          weather: List<Weather>.filled(1, meteo),
-          clouds: Clouds(all: jsonResponse['list'][i]['clouds']['all']),
-          wind: Wind(
-            speed: jsonResponse['list'][i]['wind']['speed'].toDouble(),
-            deg: jsonResponse['list'][i]['wind']['deg'],
-            gust: jsonResponse['list'][i]['wind']['gust'].toDouble(),
-          ),
-          visibility: jsonResponse['list'][i]['visibility'],
-          pop: jsonResponse['list'][i]['pop'].toDouble(),
-          sys: Sys(pod: jsonResponse['list'][i]['sys']['pod']),
-          dtTxt: jsonResponse['list'][i]['dtTxt'],
-          
-          );
+        dt: jsonResponse['list'][i]['dt'],
+        main: Main(
+          temp: jsonResponse['list'][i]['main']['temp'].toDouble(),
+          feelsLike: jsonResponse['list'][i]['main']['feels_like'].toDouble(),
+          tempMin: jsonResponse['list'][i]['main']['temp_min'].toDouble(),
+          tempMax: jsonResponse['list'][i]['main']['temp_max'].toDouble(),
+          pressure: jsonResponse['list'][i]['main']['pressure'],
+          seaLevel: jsonResponse['list'][i]['main']['sea_level'],
+          grndLevel: jsonResponse['list'][i]['main']['grnd_level'],
+          humidity: jsonResponse['list'][i]['main']['humidity'],
+          tempKf: jsonResponse['list'][i]['main']['temp_kf'].toDouble(),
+        ),
+        weather: List<Weather>.filled(1, meteo),
+        clouds: Clouds(all: jsonResponse['list'][i]['clouds']['all']),
+        wind: Wind(
+          speed: jsonResponse['list'][i]['wind']['speed'].toDouble(),
+          deg: jsonResponse['list'][i]['wind']['deg'],
+          gust: jsonResponse['list'][i]['wind']['gust'].toDouble(),
+        ),
+        visibility: jsonResponse['list'][i]['visibility'],
+        pop: jsonResponse['list'][i]['pop'].toDouble(),
+        sys: Sys(pod: jsonResponse['list'][i]['sys']['pod']),
+        dtTxt: jsonResponse['list'][i]['dtTxt'],
+      );
 
       listHours.add(hours);
     }
 
-
-    print(listHours.toList());
-
     ForecastWeather weather = ForecastWeather(
-      cod: jsonResponse['cod'],
-      message: jsonResponse['message'],
-      cnt: jsonResponse['cnt'],
-      list: listHours
-    );
+        cod: jsonResponse['cod'],
+        message: jsonResponse['message'],
+        cnt: jsonResponse['cnt'],
+        list: listHours);
     return weather;
   } else {
     print('Request failed : ${response.statusCode}');

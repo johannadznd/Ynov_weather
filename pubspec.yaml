@@ -39,6 +39,9 @@ dependencies:
   shared_preferences: ^2.0.13
   http: ^0.13.4
   path: ^1.8.0
+  intl: ^0.17.0
+  date_format: ^2.0.5
+  jiffy: ^5.0.0
 
 dev_dependencies:
   flutter_test:
