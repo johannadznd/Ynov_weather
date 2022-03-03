@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
+import 'package:jiffy/jiffy.dart';
 import 'package:ynov_weather/models/forecast_weather.dart';
 
 Future<ForecastWeather> getForecastWeather(name) async {
@@ -16,45 +17,49 @@ Future<ForecastWeather> getForecastWeather(name) async {
   });
 
   print(url);
+  String today = Jiffy(DateTime.now()).format('yyyy-MM-dd').toString();
+  today += ' 12:00:00';
   var response = await http.get(url);
-
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
     List<ListHours> listHours = [];
     for (var i = 0; i < jsonResponse['list'].length; i++) {
-      Weather meteo = Weather(
-          id: jsonResponse['list'][i]['weather'][0]['id'],
-          main: jsonResponse['list'][i]['weather'][0]['main'],
-          description: jsonResponse['list'][i]['weather'][0]['description'],
-          icon: jsonResponse['list'][i]['weather'][0]['icon']);
+      if (jsonResponse['list'][i]['dt_txt'].contains('12:00:00') &&
+          jsonResponse['list'][i]['dt_txt'] != today) {
+        Weather meteo = Weather(
+            id: jsonResponse['list'][i]['weather'][0]['id'],
+            main: jsonResponse['list'][i]['weather'][0]['main'],
+            description: jsonResponse['list'][i]['weather'][0]['description'],
+            icon: jsonResponse['list'][i]['weather'][0]['icon']);
 
-      hours = ListHours(
-        dt: jsonResponse['list'][i]['dt'],
-        main: Main(
-          temp: jsonResponse['list'][i]['main']['temp'].toDouble(),
-          feelsLike: jsonResponse['list'][i]['main']['feels_like'].toDouble(),
-          tempMin: jsonResponse['list'][i]['main']['temp_min'].toDouble(),
-          tempMax: jsonResponse['list'][i]['main']['temp_max'].toDouble(),
-          pressure: jsonResponse['list'][i]['main']['pressure'],
-          seaLevel: jsonResponse['list'][i]['main']['sea_level'],
-          grndLevel: jsonResponse['list'][i]['main']['grnd_level'],
-          humidity: jsonResponse['list'][i]['main']['humidity'],
-          tempKf: jsonResponse['list'][i]['main']['temp_kf'].toDouble(),
-        ),
-        weather: List<Weather>.filled(1, meteo),
-        clouds: Clouds(all: jsonResponse['list'][i]['clouds']['all']),
-        wind: Wind(
-          speed: jsonResponse['list'][i]['wind']['speed'].toDouble(),
-          deg: jsonResponse['list'][i]['wind']['deg'],
-          gust: jsonResponse['list'][i]['wind']['gust'].toDouble(),
-        ),
-        visibility: jsonResponse['list'][i]['visibility'],
-        pop: jsonResponse['list'][i]['pop'].toDouble(),
-        sys: Sys(pod: jsonResponse['list'][i]['sys']['pod']),
-        dtTxt: jsonResponse['list'][i]['dtTxt'],
-      );
+        hours = ListHours(
+          dt: jsonResponse['list'][i]['dt'],
+          main: Main(
+            temp: jsonResponse['list'][i]['main']['temp'].toDouble(),
+            feelsLike: jsonResponse['list'][i]['main']['feels_like'].toDouble(),
+            tempMin: jsonResponse['list'][i]['main']['temp_min'].toDouble(),
+            tempMax: jsonResponse['list'][i]['main']['temp_max'].toDouble(),
+            pressure: jsonResponse['list'][i]['main']['pressure'],
+            seaLevel: jsonResponse['list'][i]['main']['sea_level'],
+            grndLevel: jsonResponse['list'][i]['main']['grnd_level'],
+            humidity: jsonResponse['list'][i]['main']['humidity'],
+            tempKf: jsonResponse['list'][i]['main']['temp_kf'].toDouble(),
+          ),
+          weather: List<Weather>.filled(1, meteo),
+          clouds: Clouds(all: jsonResponse['list'][i]['clouds']['all']),
+          wind: Wind(
+            speed: jsonResponse['list'][i]['wind']['speed'].toDouble(),
+            deg: jsonResponse['list'][i]['wind']['deg'],
+            gust: jsonResponse['list'][i]['wind']['gust'].toDouble(),
+          ),
+          visibility: jsonResponse['list'][i]['visibility'],
+          pop: jsonResponse['list'][i]['pop'].toDouble(),
+          sys: Sys(pod: jsonResponse['list'][i]['sys']['pod']),
+          dtTxt: jsonResponse['list'][i]['dtTxt'],
+        );
 
-      listHours.add(hours);
+        listHours.add(hours);
+      }
     }
 
     ForecastWeather weather = ForecastWeather(
