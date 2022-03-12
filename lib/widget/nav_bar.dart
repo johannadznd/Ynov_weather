@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ynov_weather/db/weather.dart';
 import 'package:ynov_weather/views/weather.dart';
 import 'package:ynov_weather/models/weather.dart';
@@ -15,6 +16,13 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   late List<City> cities;
   bool isLoading = false;
+
+  late SharedPreferences prefs;
+
+  save(name) async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString("name", name.toString());
+  }
 
   @override
   void initState() {
@@ -86,7 +94,9 @@ class _NavBarState extends State<NavBar> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  await save(cities[i].name);
+
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => WeatherPage(city: cities[i]),
                   ));

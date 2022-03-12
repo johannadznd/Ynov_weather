@@ -22,39 +22,26 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherState extends State<WeatherPage> {
+  late SharedPreferences prefs;
+
+  String? value;
+
+  retrieveStringValue() async {
+    prefs = await SharedPreferences.getInstance();
+    value = prefs.getString("name");
+  }
+
   final _formKey = GlobalKey<FormState>();
 
   late String name;
 
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  late Future<String> _city;
-
-  Future<void> _CityPref() async {
-    final SharedPreferences prefs = await _prefs;
-    final String city = (prefs.getString('city') ?? 'Paris');
-
-    setState(() {
-      _city = prefs.setString('city', city).then((bool success) {
-        return city;
-      });
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    _city = _prefs.then((SharedPreferences prefs) {
-      return prefs.getString('city') ?? 'Paris';
-    });
-    name = widget.city?.name ?? 'Lyon';
+    retrieveStringValue();
+    print(value);
+    name = widget.city?.name ?? value.toString();
   }
-
-/*   @override
-  void initState() {
-    super.initState();
-
-    name = widget.city?.name ?? 'Paris';
-  } */
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +49,14 @@ class _WeatherState extends State<WeatherPage> {
         future: getWeather(name),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(body: Text("Chargement en cours ..."));
+            return Scaffold(
+                drawer: const NavBar(),
+                backgroundColor: Colors.transparent,
+                appBar: AppBar(
+                  title: const Text('Méteo', style: TextStyle(fontSize: 25)),
+                  backgroundColor: Colors.transparent,
+                ),
+                body: const Text("Chargement en cours ..."));
           } else if (snapshot.connectionState == ConnectionState.done) {
             var icon = 'http://openweathermap.org/img/wn/' +
                 snapshot.data!.weather!.first.icon.toString() +
@@ -104,10 +98,11 @@ class _WeatherState extends State<WeatherPage> {
                 ),
               ),
               child: Scaffold(
-                  drawer: const NavBar(),
+                  drawer: NavBar(),
                   backgroundColor: Colors.transparent,
                   appBar: AppBar(
-                    title: const Text('Méteo', style: TextStyle(fontSize: 25)),
+                    title: const Text('Méteo',
+                        style: TextStyle(fontSize: 25)),
                     backgroundColor: Colors.transparent,
                   ),
                   body: Column(
@@ -127,31 +122,34 @@ class _WeatherState extends State<WeatherPage> {
                                   child: Text("Chargement en cours ... "));
                             } else if (snapshot.connectionState ==
                                 ConnectionState.done) {
-                              return ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  itemCount: snapshot.data!.list!.length,
-                                  itemBuilder: (context, i) {
-                                    var icon =
-                                        'http://openweathermap.org/img/wn/' +
-                                            snapshot.data!.list![i].weather!
-                                                .first.icon
-                                                .toString() +
-                                            "@2x.png";
-                                    var timestamp1 = snapshot.data!.list![i].dt;
-                                    final DateTime date1 =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            timestamp1! * 1000);
-                                    final dayOfWeek =
-                                        Jiffy(date1).format('EEEE');
-                                    final date =
-                                        Jiffy(date1).format('d MMMM yyyy');
-                                    return ForecastWeatherWidget(
-                                        i: i,
-                                        snapshot: snapshot,
-                                        date: date,
-                                        icon: icon);
-                                  });
+                              return Flexible(
+                                child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: snapshot.data!.list!.length,
+                                    itemBuilder: (context, i) {
+                                      var icon =
+                                          'http://openweathermap.org/img/wn/' +
+                                              snapshot.data!.list![i].weather!
+                                                  .first.icon
+                                                  .toString() +
+                                              "@2x.png";
+                                      var timestamp1 =
+                                          snapshot.data!.list![i].dt;
+                                      final DateTime date1 =
+                                          DateTime.fromMillisecondsSinceEpoch(
+                                              timestamp1! * 1000);
+                                      final dayOfWeek =
+                                          Jiffy(date1).format('EEEE');
+                                      final date =
+                                          Jiffy(date1).format('d MMMM yyyy');
+                                      return ForecastWeatherWidget(
+                                          i: i,
+                                          snapshot: snapshot,
+                                          date: date,
+                                          icon: icon);
+                                    }),
+                              );
                             } else {
                               return const Text("Une erreur est survenue");
                             }
