@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ynov_weather/db/weather.dart';
 import 'package:ynov_weather/models/weather.dart';
 import 'package:ynov_weather/views/weather.dart';
@@ -14,11 +15,17 @@ class buildPopupDialog extends StatefulWidget {
 class _buildPopupDialogState extends State<buildPopupDialog> {
   final _formKey = GlobalKey<FormState>();
   late String name;
+  late SharedPreferences prefs;
 
   @override
   void initState() {
     super.initState();
     name = widget.city?.name ?? '';
+  }
+
+  save(name) async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString("name", name.toString());
   }
 
   @override
@@ -65,11 +72,6 @@ class _buildPopupDialogState extends State<buildPopupDialog> {
       } else {
         await addCity();
       }
-
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => const WeatherPage(city: City(name: "Paris"))),
-      );
     }
   }
 
@@ -79,6 +81,13 @@ class _buildPopupDialogState extends State<buildPopupDialog> {
     );
 
     await WeatherDatabase.instance.update(city);
+
+    await save(name);
+
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => WeatherPage(city: City(name: name))),
+    );
   }
 
   Future addCity() async {
@@ -87,5 +96,12 @@ class _buildPopupDialogState extends State<buildPopupDialog> {
     );
 
     await WeatherDatabase.instance.create(city);
+
+    await save(name);
+
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => WeatherPage(city: City(name: name))),
+    );
   }
 }
