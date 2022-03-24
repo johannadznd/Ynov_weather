@@ -1,3 +1,4 @@
+import 'package:animated_button/animated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ynov_weather/db/weather.dart';
@@ -53,11 +54,12 @@ class _buildPopupDialogState extends State<buildPopupDialog> {
       );
 
   Widget buildButton() {
-    return ElevatedButton(
+    return AnimatedButton(
       onPressed: addOrUpdateCity,
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.black)),
-      child: const Text('Enregistrer'),
+      color: Colors.black,
+      height: 40,
+      width: 120,
+      child: const Text('Enregistrer', style: TextStyle(color: Colors.white)),
     );
   }
 
@@ -85,8 +87,7 @@ class _buildPopupDialogState extends State<buildPopupDialog> {
     await save(name);
 
     await Navigator.of(context).push(
-      MaterialPageRoute(
-          builder: (context) => WeatherPage()),
+      MaterialPageRoute(builder: (context) => WeatherPage()),
     );
   }
 
@@ -100,8 +101,7 @@ class _buildPopupDialogState extends State<buildPopupDialog> {
     await save(name);
 
     await Navigator.of(context).push(
-      MaterialPageRoute(
-          builder: (context) => WeatherPage()),
+      MaterialPageRoute(builder: (context) => WeatherPage()),
     );
   }
 }

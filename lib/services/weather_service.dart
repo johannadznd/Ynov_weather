@@ -10,7 +10,7 @@ Future<Meteo> getWeather() async {
     late SharedPreferences prefs;
     String? name;
 
-   retrieveStringValue() async {
+  retrieveStringValue() async {
     prefs = await SharedPreferences.getInstance();
     name = prefs.getString("name");
   }

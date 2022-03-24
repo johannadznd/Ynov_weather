@@ -1,3 +1,4 @@
+import 'package:animated_button/animated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -55,20 +56,20 @@ class _NavBarState extends State<NavBar> {
             Container(
               margin: const EdgeInsets.all(20.0),
               child: Center(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.black)),
-                  child: const Text('Ajouter une ville'),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) => buildPopupDialog(),
-                    );
-                    refreshCity();
-                  },
-                ),
-              ),
+                  child: AnimatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => buildPopupDialog(),
+                  );
+                  refreshCity();
+                },
+                color: Colors.black,
+                height: 40,
+                width: 120,
+                child: const Text('Ajouter une ville',
+                    style: TextStyle(color: Colors.white)),
+              )),
             ),
             Container(
               child: isLoading
