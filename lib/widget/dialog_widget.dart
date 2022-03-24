@@ -1,8 +1,8 @@
 import 'package:animated_button/animated_button.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ynov_weather/db/weather.dart';
 import 'package:ynov_weather/models/weather.dart';
+import 'package:ynov_weather/services/sharedpreferences.dart';
 import 'package:ynov_weather/views/weather.dart';
 import 'package:ynov_weather/widget/form_widget.dart';
 
@@ -16,17 +16,11 @@ class buildPopupDialog extends StatefulWidget {
 class _buildPopupDialogState extends State<buildPopupDialog> {
   final _formKey = GlobalKey<FormState>();
   late String name;
-  late SharedPreferences prefs;
 
   @override
   void initState() {
     super.initState();
     name = widget.city?.name ?? '';
-  }
-
-  save(name) async {
-    prefs = await SharedPreferences.getInstance();
-    prefs.setString("name", name.toString());
   }
 
   @override
@@ -84,7 +78,8 @@ class _buildPopupDialogState extends State<buildPopupDialog> {
 
     await WeatherDatabase.instance.update(city);
 
-    await save(name);
+    await setPref(name);
+;
 
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => WeatherPage()),
@@ -98,7 +93,7 @@ class _buildPopupDialogState extends State<buildPopupDialog> {
 
     await WeatherDatabase.instance.create(city);
 
-    await save(name);
+    await setPref(name);
 
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => WeatherPage()),
