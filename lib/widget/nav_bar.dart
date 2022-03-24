@@ -98,7 +98,7 @@ class _NavBarState extends State<NavBar> {
                   await save(cities[i].name);
 
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => WeatherPage(city: cities[i]),
+                    builder: (context) => WeatherPage(),
                   ));
                 },
                 child: Text(

@@ -86,7 +86,7 @@ class _buildPopupDialogState extends State<buildPopupDialog> {
 
     await Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) => WeatherPage(city: City(name: name))),
+          builder: (context) => WeatherPage()),
     );
   }
 
@@ -101,7 +101,7 @@ class _buildPopupDialogState extends State<buildPopupDialog> {
 
     await Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) => WeatherPage(city: City(name: name))),
+          builder: (context) => WeatherPage()),
     );
   }
 }

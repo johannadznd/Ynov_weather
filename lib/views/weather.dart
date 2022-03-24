@@ -9,14 +9,12 @@ import 'package:ynov_weather/services/forecast_weather_service.dart'
 import 'package:ynov_weather/services/weather_service.dart';
 import 'package:ynov_weather/widget/forecast_weather_widget.dart';
 import 'package:ynov_weather/widget/nav_bar.dart';
-import 'package:ynov_weather/widget/form_widget.dart';
 import 'package:ynov_weather/models/weather.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:ynov_weather/widget/weather_day_widget.dart';
 
 class WeatherPage extends StatefulWidget {
-  final City? city;
-  const WeatherPage({Key? key, this.city}) : super(key: key);
+  const WeatherPage({Key? key}) : super(key: key);
   @override
   State<WeatherPage> createState() => _WeatherState();
 }
@@ -24,29 +22,26 @@ class WeatherPage extends StatefulWidget {
 class _WeatherState extends State<WeatherPage> {
   late SharedPreferences prefs;
 
-  String? value;
+  String? name;
 
   retrieveStringValue() async {
     prefs = await SharedPreferences.getInstance();
-    value = prefs.getString("name");
+    name = prefs.getString("name");
   }
 
   final _formKey = GlobalKey<FormState>();
 
-  late String name;
 
   @override
   void initState() {
     super.initState();
     retrieveStringValue();
-    print(value);
-    name = widget.city?.name ?? value.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Meteo>(
-        future: getWeather(name),
+        future: getWeather(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Scaffold(
@@ -101,7 +96,7 @@ class _WeatherState extends State<WeatherPage> {
                   drawer: NavBar(),
                   backgroundColor: Colors.transparent,
                   appBar: AppBar(
-                    title: const Text('Méteo',
+                    title: Text('Méteo', 
                         style: TextStyle(fontSize: 25)),
                     backgroundColor: Colors.transparent,
                   ),
