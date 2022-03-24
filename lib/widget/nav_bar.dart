@@ -76,7 +76,7 @@ class _NavBarState extends State<NavBar> {
                   ? const CircularProgressIndicator()
                   : cities.isEmpty
                       ? const Text(
-                          'Vous n\'avez pas rensigner de villes',
+                          'Vous n\'avez pas rensigné de villes',
                           style: TextStyle(color: Colors.black, fontSize: 18),
                           textAlign: TextAlign.center,
                         )
