@@ -36,7 +36,7 @@ class WeatherDayWidget extends StatelessWidget {
                 const Icon(
                   Icons.location_on_outlined,
                 ),
-                Text(name!, style: const TextStyle(fontSize: 18)),
+                Text(name ??'Paris', style: const TextStyle(fontSize: 18)),
               ]),
               Padding(
                 padding: const EdgeInsets.all(5.0),

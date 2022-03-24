@@ -109,7 +109,7 @@ class _WeatherState extends State<WeatherPage> {
                           date: date,
                           icon: icon),
                       FutureBuilder<forecast.ForecastWeather>(
-                          future: forecast_service.getForecastWeather(name),
+                          future: forecast_service.getForecastWeather(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {

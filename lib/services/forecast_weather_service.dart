@@ -2,10 +2,22 @@ import 'dart:convert';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
 import 'package:jiffy/jiffy.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ynov_weather/models/forecast_weather.dart';
 
-Future<ForecastWeather> getForecastWeather(name) async {
-  List<Location> coords = await locationFromAddress(name);
+Future<ForecastWeather> getForecastWeather() async {
+  late SharedPreferences prefs;
+  String? name;
+
+  retrieveStringValue() async {
+    prefs = await SharedPreferences.getInstance();
+    name = prefs.getString("name");
+  }
+
+  await retrieveStringValue();
+
+
+  List<Location> coords = await locationFromAddress(name ?? 'Paris' );
   late ListHours hours;
 
   Uri url = Uri.https("api.openweathermap.org", "/data/2.5/forecast/", {
