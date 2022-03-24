@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ynov_weather">
+   <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="ynov_weather"
         android:icon="@mipmap/launcher_icon">
