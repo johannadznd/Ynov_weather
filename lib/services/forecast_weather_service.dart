@@ -16,7 +16,6 @@ Future<ForecastWeather> getForecastWeather(name) async {
     'appid': 'f46840b0403f41348c5ee528a73851de'
   });
 
-  print(url);
   String today = Jiffy(DateTime.now()).format('yyyy-MM-dd').toString();
   today += ' 12:00:00';
   var response = await http.get(url);
