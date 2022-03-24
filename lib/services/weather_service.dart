@@ -1,23 +1,15 @@
 import 'dart:convert';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ynov_weather/models/meteo.dart';
+import 'package:ynov_weather/services/sharedpreferences.dart';
 
 Future<Meteo> getWeather() async {
+  String? name;
 
+  name = await getPref();
 
-    late SharedPreferences prefs;
-    String? name;
-
-  retrieveStringValue() async {
-    prefs = await SharedPreferences.getInstance();
-    name = prefs.getString("name");
-  }
-
-  await retrieveStringValue();
-
-  List<Location> coords = await locationFromAddress(name?? 'Paris' );
+  List<Location> coords = await locationFromAddress(name ?? 'Paris');
 
   Uri url = Uri.https("api.openweathermap.org", "/data/2.5/weather", {
     'lat': coords[0].latitude.toString(),
